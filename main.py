@@ -36,8 +36,9 @@ def exit_fullscreen(event):
 root = tk.Tk()
 root.title('Slideshow')
 
-# Set the window to fullscreen
-root.attributes('-fullscreen', True)
+# Remove the window title bar and border, making it borderless and fullscreen
+root.overrideredirect(True)  # This removes the title bar and makes the window borderless
+root.geometry("{0}x{1}+0+0".format(root.winfo_screenwidth(), root.winfo_screenheight()))
 
 # Bind the Escape key to exit the fullscreen mode
 root.bind('<Escape>', exit_fullscreen)
