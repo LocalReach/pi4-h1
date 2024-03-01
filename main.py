@@ -1,13 +1,9 @@
-# pip install pillow
-# pip install tk
-
 import tkinter as tk
 from PIL import Image, ImageTk
 import os
 import itertools
 import random  # Import the random module
 
-# Function to update the image
 def update_image():
     global img_label, image_files, root
 
@@ -16,7 +12,14 @@ def update_image():
     
     # Open the image file
     img = Image.open(img_path)
-    img = img.resize((500, 500), Image.Resampling.LANCZOS)  # Resize the image to fit the label
+
+    # Get screen width and height
+    screen_width = root.winfo_screenwidth()
+    screen_height = root.winfo_screenheight()
+
+    # Resize the image to fit the screen while maintaining aspect ratio
+    img.thumbnail((screen_width, screen_height), Image.Resampling.LANCZOS)
+
     photo = ImageTk.PhotoImage(img)
 
     # Update the label with the new image
@@ -26,16 +29,22 @@ def update_image():
     # Set the timer to update the image after 5 seconds
     root.after(5000, update_image)
 
+def exit_fullscreen(event):
+    root.destroy()  # Closes the application
+
 # Initialize Tkinter
 root = tk.Tk()
 root.title('Slideshow')
 
-# Set the geometry of the window
-root.geometry("600x600")
+# Set the window to fullscreen
+root.attributes('-fullscreen', True)
+
+# Bind the Escape key to exit the fullscreen mode
+root.bind('<Escape>', exit_fullscreen)
 
 # Create a label to display images
 img_label = tk.Label(root)
-img_label.pack()
+img_label.pack(expand=True, fill='both')
 
 # Specify the directory containing images
 image_dir = 'ads/'
@@ -51,4 +60,3 @@ update_image()
 
 # Start the Tkinter event loop
 root.mainloop()
-
