@@ -36,8 +36,8 @@ root.overrideredirect(True)  # This removes the title bar and makes the window b
 root.geometry("{0}x{1}+0+0".format(root.winfo_screenwidth(), root.winfo_screenheight()))
 
 # Bind the Escape key to exit the fullscreen mode
-root.bind('q', exit_fullscreen)
-root.bind('Q', exit_fullscreen)
+root.bind('w', exit_fullscreen)
+root.bind('W', exit_fullscreen)
 
 # Create a label to display images
 img_label = tk.Label(root)

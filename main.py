@@ -1,3 +1,9 @@
+import cv2
+import tkinter as tk
+from PIL import Image, ImageTk
+import os
+import itertools
+import random 
 import subprocess
 from pynput.keyboard import Key, Listener
 import threading
@@ -26,13 +32,12 @@ print("Press 'q' to exit the loop.")
 
 def main():
     while loop_running:
-        subprocess.run(["python", "livestream.py"])
+        os.system("livestream.py")
         print('livestream exited!')
         time.sleep(1)
-        subprocess.run(["python", "ads.py"])
+        os.system("ads.py")
         print('ads exited!')
         time.sleep(1)
-
     listener_thread.join()  # Wait for the listener thread to finish
     print("You pressed 'q'. Exiting loop...")
         
