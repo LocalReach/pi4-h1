@@ -32,10 +32,12 @@ print("Press 'q' to exit the loop.")
 
 def main():
     while loop_running:
-        os.system("livestream.py")
+        # os.system("livestream.py")
+        subprocess.run(["python", "livestream.py"])
         print('livestream exited!')
         time.sleep(1)
-        os.system("ads.py")
+        # os.system("ads.py")
+        subprocess.run(["python", "ads.py"])
         print('ads exited!')
         time.sleep(1)
     listener_thread.join()  # Wait for the listener thread to finish
