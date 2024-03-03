@@ -1,64 +1,40 @@
-import tkinter as tk
-from PIL import Image, ImageTk
-import os
-import itertools
-import random  # Import the random module
+import subprocess
+from pynput.keyboard import Key, Listener
+import threading
+import time
 
-def update_image():
-    global img_label, image_files, root
+# This variable is used to control the loop execution
+loop_running = True
 
-    # Move to the next image
-    img_path = next(image_files)
-    
-    # Open the image file
-    img = Image.open(img_path)
+def on_press(key):
+    global loop_running
+    # Check if the pressed key is 'q'
+    if key.char == 'q':
+        loop_running = False
+        return False  # Returning False stops the listener
 
-    # Get screen width and height
-    screen_width = root.winfo_screenwidth()
-    screen_height = root.winfo_screenheight()
+def listen_for_exit_key():
+    # Start listening for keypress
+    with Listener(on_press=on_press) as listener:
+        listener.join()
 
-    # Resize the image to fit the screen while maintaining aspect ratio
-    img.thumbnail((screen_width, screen_height), Image.Resampling.LANCZOS)
+# Start the key listener in a separate thread
+listener_thread = threading.Thread(target=listen_for_exit_key)
+listener_thread.start()
 
-    photo = ImageTk.PhotoImage(img)
+print("Press 'q' to exit the loop.")
 
-    # Update the label with the new image
-    img_label.configure(image=photo)
-    img_label.image = photo
+def main():
+    while loop_running:
+        subprocess.run(["python", "livestream.py"])
+        print('livestream exited!')
+        time.sleep(1)
+        subprocess.run(["python", "ads.py"])
+        print('ads exited!')
+        time.sleep(1)
 
-    # Set the timer to update the image after 5 seconds
-    root.after(5000, update_image)
+    listener_thread.join()  # Wait for the listener thread to finish
+    print("You pressed 'q'. Exiting loop...")
+        
 
-def exit_fullscreen(event):
-    root.destroy()  # Closes the application
-
-# Initialize Tkinter
-root = tk.Tk()
-root.title('Slideshow')
-
-# Remove the window title bar and border, making it borderless and fullscreen
-root.overrideredirect(True)  # This removes the title bar and makes the window borderless
-root.geometry("{0}x{1}+0+0".format(root.winfo_screenwidth(), root.winfo_screenheight()))
-
-# Bind the Escape key to exit the fullscreen mode
-root.bind('q', exit_fullscreen)
-root.bind('Q', exit_fullscreen)
-
-# Create a label to display images
-img_label = tk.Label(root)
-img_label.pack(expand=True, fill='both')
-
-# Specify the directory containing images
-image_dir = 'ads/'
-# List all image files in the directory
-image_paths = [os.path.join(image_dir, f) for f in os.listdir(image_dir) if os.path.isfile(os.path.join(image_dir, f)) and (f.endswith('.jpg') or f.endswith('.png'))]
-# Shuffle the list of image paths
-random.shuffle(image_paths)
-# Create a cycle iterator from the shuffled list
-image_files = itertools.cycle(image_paths)
-
-# Start the slideshow
-update_image()
-
-# Start the Tkinter event loop
-root.mainloop()
+main()
