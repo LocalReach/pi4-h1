@@ -40,7 +40,8 @@ root.title('Slideshow')
 root.attributes('-fullscreen', True)
 
 # Bind the Escape key to exit the fullscreen mode
-root.bind('<Escape>', exit_fullscreen)
+root.bind('q', exit_fullscreen)
+root.bind('Q', exit_fullscreen)
 
 # Create a label to display images
 img_label = tk.Label(root)
