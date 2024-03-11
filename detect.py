@@ -117,10 +117,11 @@ def run(model: str, camera_id: int, width: int, height: int, num_threads: int,
         # else:
         #     # image = cv2.putText(image, "ADBREAK", (50,50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,255,0), 2, cv2.LINE_AA) 
   
-        if channel_feed:
+        while channel_feed:
             subprocess.run(["python", "livestream.py"])
             print('livestream exited!')
             time.sleep(1)
+            
         else:
             subprocess.run(["python", "ads.py"])
             print('ads exited!')
