@@ -7,8 +7,11 @@ import random
 def exit_fullscreen(event):
     root.destroy()  # Closes the application
 
+def stop_slideshow():
+    root.after_cancel(update_id)  # Cancel the update event
+
 def update_image():
-    global img_label, image_files, root
+    global img_label, image_files, root, update_id
     img_path = next(image_files)
     img = Image.open(img_path)
 
@@ -17,7 +20,7 @@ def update_image():
     screen_height = root.winfo_screenheight()
 
     # Resize the image to fit the screen while maintaining aspect ratio
-    img.thumbnail((screen_width, screen_height), Image.Resampling.LANCZOS)
+    img.thumbnail((screen_width, screen_height), Image.ANTIALIAS)
     photo = ImageTk.PhotoImage(img)
 
     # Update the label with the new image
@@ -25,7 +28,7 @@ def update_image():
     img_label.image = photo
 
     # Set the timer to update the image after 5 seconds
-    root.after(5000, update_image)
+    update_id = root.after(5000, update_image)
 
 # Initialize Tkinter
 root = tk.Tk()
@@ -54,6 +57,10 @@ image_files = itertools.cycle(image_paths)
 
 # Start the slideshow
 update_image()
+
+# Create a button to stop the slideshow
+stop_button = tk.Button(root, text="Stop Slideshow", command=stop_slideshow)
+stop_button.pack()
 
 # Start the Tkinter event loop
 root.mainloop()

@@ -53,7 +53,7 @@ def run(model: str, camera_id: int, width: int, height: int, num_threads: int,
     font_size = 1
     font_thickness = 1
     fps_avg_frame_count = 10
-    channel_feed = False
+    channel_feed = True
     adbreak = False
 
     # Initialize the object detection model
@@ -97,7 +97,7 @@ def run(model: str, camera_id: int, width: int, height: int, num_threads: int,
         
 
         # Draw keypoints and edges on input image
-        image = utils.visualize(image, detection_result)
+        # image = utils.visualize(image, detection_result)
         
         
         
